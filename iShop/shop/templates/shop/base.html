@@ -143,9 +143,13 @@
                                 <i class="fas fa-heart text-primary"></i>
                                 <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
                             </a>
-                            <a href="" class="btn px-0 ml-3">
+                            <a href="{% url 'cart:cart_detail' %}" class="btn px-0 ml-3">
                                 <i class="fas fa-shopping-cart text-primary"></i>
-                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
+                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">
+                                    {% with total_items=cart|length %}
+                                        {{ total_items }}
+                                    {% endwith %}
+                                </span>
                             </a>
                         </div>
                     </div>
@@ -239,7 +243,7 @@
                         </div>
                         <div class="flex-fill pl-3">
                             <h6>{{ category.name }}</h6>
-                            <small class="text-body">{{ category.short_description|truncatechars:20|truncatewords:3 }}</small>
+                            <small class="text-body">{{ category.products.count }} Products</small>
                         </div>
                     </div>
                 </a>
@@ -274,7 +278,7 @@
                     <div class="text-center py-4">
                         <a class="h6 text-decoration-none text-truncate" href="{{ product.get_absolute_url }}">{{ product.name }}</a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>{{ product.price }} UAH</h5><h6 class="text-muted ml-2"><del>{{ product.price }}</del></h6>
+                            <h5>$ {{ product.price }}</h5><h6 class="text-muted ml-2"><del>{{ product.price }}</del></h6>
                         </div>
                         <div class="d-flex align-items-center justify-content-center mb-1">
                             <small class="fa fa-star text-primary mr-1"></small>
@@ -347,7 +351,7 @@
                             {{ product.name }}
                         </a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>{{ product.price }} UAH</h5>
+                            <h5>$ {{ product.price }}</h5>
                             <h6 class="text-muted ml-2"><del>{{ product.price }}</del></h6>
                         </div>
                         <div class="d-flex align-items-center justify-content-center mb-1">
