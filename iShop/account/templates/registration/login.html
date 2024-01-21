@@ -1,0 +1,57 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+    Log-in
+{% endblock %}
+
+{% block content %}
+
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="#">Home</a>
+                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                    <span class="breadcrumb-item active">Login</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Login Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-lg-8">
+                <h5 class="section-title position-relative text-uppercase mb-3">
+                    <span class="bg-secondary pr-3">Login</span>
+                </h5>
+                <div class="bg-light p-30 mb-5">
+                    <h1>Log-in</h1>
+                    {% if form.errors %}
+                        <p>Your username and password didn't match. Please try again.</p>
+                    {% else %}
+                        <p>
+                            Please, use the following form to log-in.
+                            If you don't have an account <a href="{% url 'register' %}">register here</a>.
+                        </p>
+                    {% endif %}
+                    <form action="{% url 'login' %}" method="post">
+                        {{ form.as_p }}
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ next }}">
+                        <p><input type="submit" value="Log in"></p>
+                    </form>
+                    <p><a href="{% url 'password_reset' %}">Forgotten your password?</a></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Login End -->
+
+{% endblock %}
