@@ -1,9 +1,11 @@
 from django.db import models
 from shop.models import Product
 from phonenumber_field.modelfields import PhoneNumberField
+from django.conf import settings
 
 
 class Order(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='order')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()

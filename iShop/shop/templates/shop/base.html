@@ -294,7 +294,7 @@
                         <img class="img-fluid w-100" src="{% if product.image  %}{{ product.image.url }}
                         {% else %}{% static 'img/product-1.jpg' %}{% endif %}" width="500" height="500" alt="">
                         <div class="product-action">
-                            <a class="btn btn-outline-dark btn-square" href="">
+                            <a class="btn btn-outline-dark btn-square" href="{% url 'cart:cart_add' product.id %}">
                                 <i class="fa fa-shopping-cart"></i>
                             </a>
                             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
@@ -525,6 +525,22 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'js/main.js' %}"></script>
+    <script>
+
+        // Add star rating
+        const rating = document.querySelector('form[name=rating]');
+
+        rating.addEventListener("change", function (e) {
+            // Получаем данные из формы
+            let data = new FormData(this);
+            fetch(`${this.action}`, {
+                method: 'POST',
+                body: data
+            })
+                .then(response => alert("Рейтинг установлен"))
+                .catch(error => alert("Ошибка"))
+        });
+    </script>
 </body>
 
 </html>

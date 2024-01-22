@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Brand, ProductImages
+from .models import Category, Product, Brand, ProductImages, Review, RatingStar, Rating
 from django.utils.safestring import mark_safe
 
 
@@ -39,3 +39,18 @@ class BrandAdmin(admin.ModelAdmin):
 @admin.register(ProductImages)
 class ProductImagesAdmin(admin.ModelAdmin):
     list_display = ['image', 'product']
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ['user', 'date', 'product', 'parent', 'text']
+
+
+@admin.register(RatingStar)
+class RatingStarAdmin(admin.ModelAdmin):
+    list_display = ['value', ]
+
+
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    list_display = ['ip', 'product', 'star']

@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
 
 
 class Category(models.Model):
@@ -60,7 +61,58 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('shop:product_detail', args=[self.slug])
 
+    def get_review(self):
+        return self.reviews.filter(parent__isnull=True)
+
 
 class ProductImages(models.Model):
     image = models.ImageField(upload_to='products/%Y/%m/%d')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+
+class Review(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviews')
+    text = models.TextField(max_length=1000)
+    parent = models.ForeignKey('self',
+                               verbose_name='Parent',
+                               on_delete=models.SET_NULL,
+                               blank=True,
+                               null=True,
+                               related_name='children')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user} - {self.product}'
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['product']),
+        ]
+
+
+class RatingStar(models.Model):
+    """Звезда рейтинга"""
+    value = models.SmallIntegerField('Значение', default=0)
+
+    def __str__(self):
+        return f'{self.value}'
+
+    class Meta:
+        verbose_name = "Звезда рейтинга"
+        verbose_name_plural = "Звезды рейтинга"
+        ordering = ["-value"]
+
+
+class Rating(models.Model):
+    """Рейтинг"""
+    ip = models.CharField('IP адресс', max_length=15)
+    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name='звезда')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт', related_name='ratings')
+
+    def __str__(self):
+        return f'{self.star} - {self.product}'
+
+    class Meta:
+        verbose_name = 'Рейтинг'
+        verbose_name_plural = 'Рейтинги'

@@ -102,8 +102,12 @@
                             <h5>Total</h5>
                             <h5>${{ cart.get_total_price }}</h5>
                         </div>
+                        {% if request.user.is_authenticated %}
                         <a href="{% url 'orders:order_create' %}"
                            class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</a>
+                        {% else %}
+                        You need to be authenticated first
+                        {% endif %}
                     </div>
                 </div>
             </div>
