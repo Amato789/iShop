@@ -291,9 +291,14 @@
                         <img class="img-fluid w-100" src="{% if product.image  %}{{ product.image.url }}
                         {% else %}{% static 'img/product-1.jpg' %}{% endif %}" width="500" height="500" alt="">
                         <div class="product-action">
-                            <a class="btn btn-outline-dark btn-square" href="{% url 'cart:cart_add' product.id %}">
-                                <i class="fa fa-shopping-cart"></i>
-                            </a>
+                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="1" min="1" required id="id_quantity">
+                                <input type="hidden" name="override" value="False" id="id_override">
+                                <button class="btn btn-outline-dark btn-square">
+                                    <i class="fa fa-shopping-cart"></i>
+                                </button>
+                            </form>
                             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
@@ -367,7 +372,14 @@
                         <img class="img-fluid w-100" src="{% if product.image %}{{ product.image.url }}
                         {% else %}{% static 'img/product-1.jpg' %}{% endif %}" alt="">
                         <div class="product-action">
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="1" min="1" required id="id_quantity">
+                                <input type="hidden" name="override" value="False" id="id_override">
+                                <button class="btn btn-outline-dark btn-square">
+                                    <i class="fa fa-shopping-cart"></i>
+                                </button>
+                            </form>
                             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
