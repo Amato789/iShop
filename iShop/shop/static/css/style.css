@@ -9748,3 +9748,12 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 /* //Checkbox stars */
+
+.checked {
+  color: orange;
+}
+
+.my-btn {
+  background-color: inherit !important;
+  border: 0 !important;
+}

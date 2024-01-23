@@ -1,9 +1,9 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Product, Rating
 from cart.form import CartAddProductForm
 from django.views import View
-from .forms import ReviewForm, RatingForm
+from .forms import ReviewForm
 
 
 def main(request):
@@ -35,11 +35,10 @@ def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, available=True)
     cart_product_form = CartAddProductForm()
     form = ReviewForm()
-    star_form = RatingForm()
     return render(
         request,
         'shop/product/detail.html',
-        {'product': product, 'cart_product_form': cart_product_form, 'form': form, 'star_form': star_form}
+        {'product': product, 'cart_product_form': cart_product_form, 'form': form}
     )
 
 
@@ -60,25 +59,17 @@ class AddReview(View):
         return redirect(product.get_absolute_url())
 
 
-class AddStarRating(View):
-    """Добавление рейтинга фильму"""
+def rate_product(request):
+    if request.method == 'POST':
+        el_id = request.POST.get('el_id')
+        val = request.POST.get('val')
+        prod = Product.objects.get(id=el_id)
+        try:
+            obj = Rating.objects.get(product=prod, user=request.user)
+            obj.star = val
+            obj.save()
+        except Rating.DoesNotExist:
+            Rating.objects.create(product=prod, user=request.user, star=val)
 
-    def get_client_ip(self, request):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
-
-    def post(self, request):
-        form = RatingForm(request.POST)
-        if form.is_valid():
-            Rating.objects.update_or_create(
-                ip=self.get_client_ip(request),
-                product_id=int(request.POST.get("product")),
-                defaults={'star_id': int(request.POST.get("star"))}
-            )
-            return HttpResponse(status=201)
-        else:
-            return HttpResponse(status=400)
+        return JsonResponse({'success': 'true', 'star': val}, safe=False)
+    return JsonResponse({'success': 'false'})

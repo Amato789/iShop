@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Category(models.Model):
@@ -64,6 +65,9 @@ class Product(models.Model):
     def get_review(self):
         return self.reviews.filter(parent__isnull=True)
 
+    def get_rating(self):
+        return self.ratings.aggregate(models.Avg('star', default=0))['star__avg']
+
 
 class ProductImages(models.Model):
     image = models.ImageField(upload_to='products/%Y/%m/%d')
@@ -91,27 +95,14 @@ class Review(models.Model):
         ]
 
 
-class RatingStar(models.Model):
-    """Звезда рейтинга"""
-    value = models.SmallIntegerField('Значение', default=0)
-
-    def __str__(self):
-        return f'{self.value}'
-
-    class Meta:
-        verbose_name = "Звезда рейтинга"
-        verbose_name_plural = "Звезды рейтинга"
-        ordering = ["-value"]
-
-
 class Rating(models.Model):
     """Рейтинг"""
-    ip = models.CharField('IP адресс', max_length=15)
-    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name='звезда')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ratings')
+    star = models.IntegerField(default=0, validators=[MaxValueValidator(5), MinValueValidator(0)])
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт', related_name='ratings')
 
     def __str__(self):
-        return f'{self.star} - {self.product}'
+        return str({self.pk})
 
     class Meta:
         verbose_name = 'Рейтинг'

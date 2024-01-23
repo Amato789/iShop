@@ -56,30 +56,21 @@
                     <h3>{{ product.name }}</h3>
                     <div class="d-flex mb-3">
 
-
-                        <form action="{% url 'shop:add_rating' %}" method="post" name="rating">
-                            {% csrf_token %}
-                            <input type="hidden" value="{{ product.id }}" name="product">
-                            <span class="rating">
-                                {% for k, v in star_form.fields.star.choices %}
-                                    <input id="rating{{ v }}" type="radio" name="star"
-                                           value="{{ k }}">
-                                    <label for="rating{{ v }}">{{ k }}</label>
-                                {% endfor %}
-                            </span>
-                            <span class="editContent">4.0</span>
-                        </form>
-
-
-                        <div class="text-primary mr-2">
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star-half-alt"></small>
-                            <small class="far fa-star"></small>
+                        <div>
+                            <form class="rate-form" action="" method="post" id="{{ product.id }}">
+                                {% csrf_token %}
+                                {% with cur_rating=product.get_rating %}
+                                <button type="submit" class="fa fa-star my-btn {% if cur_rating > 0.5 %}checked{% else %}{% endif %}" id="first"></button>
+                                <button type="submit" class="fa fa-star my-btn {% if cur_rating > 1.5 %}checked{% else %}{% endif %}" id="second"></button>
+                                <button type="submit" class="fa fa-star my-btn {% if cur_rating > 2.5 %}checked{% else %}{% endif %}" id="third"></button>
+                                <button type="submit" class="fa fa-star my-btn {% if cur_rating > 3.5 %}checked{% else %}{% endif %}" id="fourth"></button>
+                                <button type="submit" class="fa fa-star my-btn {% if cur_rating > 4.5 %}checked{% else %}{% endif %}" id="fifth"></button>
+                                {% endwith %}
+                            </form>
                         </div>
-                        <small class="pt-1">(99 Reviews)</small>
+                        <small class="pt-1">({{ product.ratings.count }} Reviews)</small>
                     </div>
+                    <div id="confirm-box"></div>
                     <h3 class="font-weight-semi-bold mb-4">$ {{ product.price }}</h3>
                     <p class="mb-4">{{ product.description }}</p>
                     <div class="d-flex mb-3">
@@ -238,13 +229,7 @@
                                         <img src="{{ review.user.profile.photo.url }}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
                                         <div class="media-body">
                                             <h6>{{ review.user.username }}<small> - <i>{{ review.date }}</i></small></h6>
-                                            <div class="text-primary mb-2">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star-half-alt"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
+
                                             <p>{{ review.text }}</p>
                                         </div>
                                     </div>
