@@ -5,6 +5,8 @@ from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditFor
 from django.contrib.auth.decorators import login_required
 from .models import Profile
 from django.contrib import messages
+from orders.models import Order
+from wishlist.models import Wishlist
 
 
 def user_login(request):
@@ -28,7 +30,11 @@ def user_login(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'account/dashboard.html', {'section': 'dashboard'})
+    user_orders = Order.objects.filter(user=request.user)
+    user_wishlist = Wishlist.objects.filter(user=request.user)
+    return render(request,
+                  'account/dashboard.html',
+                  {'section': 'dashboard', 'user_orders': user_orders, 'user_wishlist': user_wishlist})
 
 
 def register(request):

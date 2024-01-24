@@ -38,10 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'shop.apps.ShopConfig',
     'django.contrib.postgres',
+
+    'shop.apps.ShopConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
+    'wishlist.apps.WishlistConfig',
+
     'phonenumber_field',
     'social_django',
     'django_extensions',
