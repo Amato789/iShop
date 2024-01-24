@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
     'wishlist.apps.WishlistConfig',
+    'contact.apps.ContactConfig',
 
     'phonenumber_field',
     'social_django',

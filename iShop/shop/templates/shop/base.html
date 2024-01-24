@@ -60,20 +60,10 @@
                         </div>
                     </div>
                     <div class="btn-group mx-2">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">USD</button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">EUR</button>
-                            <button class="dropdown-item" type="button">GBP</button>
-                            <button class="dropdown-item" type="button">CAD</button>
-                        </div>
+
                     </div>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">EN</button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">FR</button>
-                            <button class="dropdown-item" type="button">AR</button>
-                            <button class="dropdown-item" type="button">RU</button>
-                        </div>
+
                     </div>
                 </div>
                 <div class="d-inline-flex align-items-center d-block d-lg-none">
@@ -295,11 +285,15 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="quantity" value="1" min="1" required id="id_quantity">
                                 <input type="hidden" name="override" value="False" id="id_override">
-                                <button class="btn btn-outline-dark btn-square">
-                                    <i class="fa fa-shopping-cart"></i>
+                                <button class="btn btn-outline-dark btn-square"><i class="fa fa-shopping-cart"></i>
                                 </button>
                             </form>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                            <form action="{% url 'wishlist:wishlist_add' product.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="user" value="{{ request.user.id }}" required id="id_user">
+                                <input type="hidden" name="product" value="{{ product.id }}" required id="id_product">
+                                <button class="btn btn-outline-dark btn-square"><i class="far fa-heart"></i></button>
+                            </form>
                             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
                         </div>
