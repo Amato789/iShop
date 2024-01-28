@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-yhcg^=w_hv=v!4+xa5hnhm3wm!d4fa%8^b(wq30^r$su0g1q+t
 DEBUG = True
 
 ALLOWED_HOSTS = ['mysite.com', 'localhost', '127.0.0.1']
-
 
 # Application definition
 
@@ -45,6 +43,7 @@ INSTALLED_APPS = [
     'orders.apps.OrdersConfig',
     'wishlist.apps.WishlistConfig',
     'contact.apps.ContactConfig',
+    'payment.apps.PaymentConfig',
 
     'phonenumber_field',
     'social_django',
@@ -82,7 +81,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'iShop.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -94,7 +92,6 @@ DATABASES = {
         'PASSWORD': 'postgres',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -114,7 +111,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -125,7 +121,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -178,3 +173,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
 )
+
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51OcqYoIWOvsq1eRbqWqwbDvB9e6G2frX3RSnmjpJvfiwYIAKSg4P41E6tZ3MrGmia164H5sN2vPoSTC1O3hVs4eE00rQZY0qvK'
+STRIPE_SECRET_KEY = 'sk_test_51OcqYoIWOvsq1eRbXdP9LbybSX1QZ7uxGHF8iNG6UJZCyYO9HYpUxFXr6rImGQgk9fwtSFKqce5lMof7OYGOt8Hu00f5VbCkhx'
+STRIPE_API_VERSION = '2023-10-16'
+STRIPE_WEBHOOK_SECRET = 'whsec_cb30f1dd0c8a900e158f94f86dfa0b557133b70c4a1056b99e3c491b47934a4d'

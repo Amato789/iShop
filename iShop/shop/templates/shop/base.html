@@ -29,24 +29,22 @@
         <div class="row bg-secondary py-1 px-xl-5">
             <div class="col-lg-6 d-none d-lg-block">
                 <div class="d-inline-flex align-items-center h-100">
-                    <a class="text-body mr-3" href="">About</a>
-                    <a class="text-body mr-3" href="">Contact</a>
-                    <a class="text-body mr-3" href="">Help</a>
-                    <a class="text-body mr-3" href="">FAQs</a>
+                    <a class="text-body mr-3" href="{% url 'about' %}">About</a>
+                    <a class="text-body mr-3" href="{% url 'contact' %}">Contact</a>
                 </div>
             </div>
             <div class="col-lg-6 text-center text-lg-right">
                 <div class="d-inline-flex align-items-center">
                     <div class="btn-group">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
-                            {% if request.user.is_authenticated %}
-                                {{ request.user.first_name|default:request.user.username }}
+                            {% if user.is_authenticated %}
+                                {{ user.first_name|default:user.username }}
                             {% else %}
                                 My account
                             {% endif %}
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            {% if request.user.is_authenticated %}
+                            {% if user.is_authenticated %}
                                 <a href="{% url 'dashboard' %}" class="dropdown-item" type="button">My account</a>
                                 <a href="" class="dropdown-item" type="button">My orders</a>
                                 <form method="post" action="{% url 'logout' %}">
@@ -129,8 +127,8 @@
             <div class="col-lg-9">
                 <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
                     <a href="" class="text-decoration-none d-block d-lg-none">
-                        <span class="h1 text-uppercase text-dark bg-light px-2">Multi</span>
-                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Shop</span>
+                        <span class="h1 text-uppercase text-dark bg-light px-2"></span>
+                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1"></span>
                     </a>
                     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
@@ -138,12 +136,15 @@
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
                             <a href="{% url 'shop:index' %}" class="nav-item nav-link active">Home</a>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-                            <a href="" class="btn px-0">
+
+                            <a href="{% url 'dashboard' %}" class="btn px-0">
                                 <i class="fas fa-heart text-primary"></i>
-                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
+                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">
+                                    {% if user.wishlist %}{{ user.wishlist.count }}{% else %}0{% endif %}
+                                </span>
                             </a>
 
                             {% with total_items=cart|length %}
@@ -281,21 +282,22 @@
                         <img class="img-fluid w-100" src="{% if product.image  %}{{ product.image.url }}
                         {% else %}{% static 'img/product-1.jpg' %}{% endif %}" width="500" height="500" alt="">
                         <div class="product-action">
-                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                            <form class="myform" action="{% url 'cart:cart_add' product.id %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="quantity" value="1" min="1" required id="id_quantity">
                                 <input type="hidden" name="override" value="False" id="id_override">
                                 <button class="btn btn-outline-dark btn-square"><i class="fa fa-shopping-cart"></i>
                                 </button>
                             </form>
-                            <form action="{% url 'wishlist:wishlist_add' product.id %}" method="post">
+                            <form class="myform" action="{% url 'wishlist:wishlist_add' product.id %}" method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="user" value="{{ request.user.id }}" required id="id_user">
+                                <input type="hidden" name="user" value="{{ user.id }}" required id="id_user">
                                 <input type="hidden" name="product" value="{{ product.id }}" required id="id_product">
                                 <button class="btn btn-outline-dark btn-square"><i class="far fa-heart"></i></button>
                             </form>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                            <a class="btn btn-outline-dark btn-square" href="{{ product.get_absolute_url }}">
+                                <i class="fa fa-search"></i>
+                            </a>
                         </div>
                     </div>
                     <div class="text-center py-4">
@@ -366,17 +368,22 @@
                         <img class="img-fluid w-100" src="{% if product.image %}{{ product.image.url }}
                         {% else %}{% static 'img/product-1.jpg' %}{% endif %}" alt="">
                         <div class="product-action">
-                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                            <form class="myform" action="{% url 'cart:cart_add' product.id %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="quantity" value="1" min="1" required id="id_quantity">
                                 <input type="hidden" name="override" value="False" id="id_override">
-                                <button class="btn btn-outline-dark btn-square">
-                                    <i class="fa fa-shopping-cart"></i>
+                                <button class="btn btn-outline-dark btn-square"><i class="fa fa-shopping-cart"></i>
                                 </button>
                             </form>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                            <form class="myform" action="{% url 'wishlist:wishlist_add' product.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="user" value="{{ user.id }}" required id="id_user">
+                                <input type="hidden" name="product" value="{{ product.id }}" required id="id_product">
+                                <button class="btn btn-outline-dark btn-square"><i class="far fa-heart"></i></button>
+                            </form>
+                            <a class="btn btn-outline-dark btn-square" href="{{ product.get_absolute_url }}">
+                                <i class="fa fa-search"></i>
+                            </a>
                         </div>
                     </div>
                     <div class="text-center py-4">
@@ -407,81 +414,45 @@
     </div>
     <!-- Products End -->
 
-
-    <!-- Vendor Start -->
-    <div class="container-fluid py-5">
-        <div class="row px-xl-5">
-            <div class="col">
-                <div class="owl-carousel vendor-carousel">
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-1.jpg' %}" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-2.jpg' %}" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-3.jpg' %}" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-4.jpg' %}" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-5.jpg' %}" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-6.jpg' %}" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-7.jpg' %}" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="{% static 'img/vendor-8.jpg' %}" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Vendor End -->
-
     {% endblock %}
 
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
         <div class="row px-xl-5 pt-5">
             <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
-                <h5 class="text-secondary text-uppercase mb-4">Get In Touch</h5>
-                <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed dolor. Rebum tempor no vero est magna amet no</p>
-                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
-                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
+                <h5 class="text-secondary text-uppercase mb-4">This is the PET-project</h5>
+                <p class="mb-4"></p>
+                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Kyiv, Ukraine</p>
+                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>maximsidorchuk@gmail.com</p>
+                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+38 093 963 0202</p>
             </div>
             <div class="col-lg-8 col-md-12">
                 <div class="row">
                     <div class="col-md-4 mb-5">
-                        <h5 class="text-secondary text-uppercase mb-4">Quick Shop</h5>
+                        <h5 class="text-secondary text-uppercase mb-4">iShop</h5>
                         <div class="d-flex flex-column justify-content-start">
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-                            <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                            <a class="text-secondary mb-2" href="{% url 'shop:index' %}">
+                                <i class="fa fa-angle-right mr-2"></i>Home
+                            </a>
+                            <a class="text-secondary mb-2" href="{% url 'about' %}">
+                                <i class="fa fa-angle-right mr-2"></i>About
+                            </a>
+                            <a class="text-secondary mb-2" href="{% url 'cart:cart_detail' %}">
+                                <i class="fa fa-angle-right mr-2"></i>Shopping Cart
+                            </a>
+                            <a class="text-secondary mb-2" href="{% url 'dashboard' %}">
+                                <i class="fa fa-angle-right mr-2"></i>My account
+                            </a>
+                            <a class="text-secondary" href="{% url 'contact' %}">
+                                <i class="fa fa-angle-right mr-2"></i>Contact Us
+                            </a>
                         </div>
                     </div>
                     <div class="col-md-4 mb-5">
-                        <h5 class="text-secondary text-uppercase mb-4">My Account</h5>
-                        <div class="d-flex flex-column justify-content-start">
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-                            <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
-                        </div>
                     </div>
                     <div class="col-md-4 mb-5">
                         <h5 class="text-secondary text-uppercase mb-4">Newsletter</h5>
-                        <p>Duo stet tempor ipsum sit amet magna ipsum tempor est</p>
+                        <p></p>
                         <form action="">
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Your Email Address">
@@ -499,18 +470,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
-            <div class="col-md-6 px-xl-0">
-                <p class="mb-md-0 text-center text-md-left text-secondary">
-                    &copy; <a class="text-primary" href="#">Domain</a>. All Rights Reserved. Designed
-                    by
-                    <a class="text-primary" href="https://htmlcodex.com">HTML Codex</a>
-                </p>
-            </div>
-            <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="{% static 'img/payments.png' %}" alt="">
             </div>
         </div>
     </div>
