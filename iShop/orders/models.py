@@ -2,6 +2,7 @@ from django.db import models
 from shop.models import Product
 from phonenumber_field.modelfields import PhoneNumberField
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Order(models.Model):
@@ -28,6 +29,12 @@ class Order(models.Model):
     def get_total_cost(self):
         return sum(item.get_cost() for item in self.items.all())
 
+    def get_total_discount(self):
+        return sum(item.get_discount() for item in self.items.all())
+
+    def get_total_cost_with_discount(self):
+        return self.get_total_cost() - self.get_total_discount()
+
     def get_stripe_url(self):
         if not self.stripe_id:
             return ''
@@ -43,9 +50,16 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
+    discount = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
 
     def __str__(self):
         return str(self.id)
 
     def get_cost(self):
         return self.price * self.quantity
+
+    def get_discount(self):
+        return self.price * self.quantity * self.discount / 100
+
+    def get_cost_with_discount(self):
+        return self.get_cost() - self.get_discount()

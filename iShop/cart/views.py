@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from shop.models import Product
+from discount.models import Discount
 from .cart import Cart
 from .form import CartAddProductForm
 
