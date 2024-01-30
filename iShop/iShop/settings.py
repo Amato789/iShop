@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-from config import (
+from .config import (
     SECRET_KEY,
     DEBUG,
     DB_NAME,
