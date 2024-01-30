@@ -11,6 +11,20 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from config import (
+    SECRET_KEY,
+    DEBUG,
+    DB_NAME,
+    DB_USER,
+    DB_PASSWORD,
+    SOCIAL_AUTH_FACEBOOK_KEY,
+    SOCIAL_AUTH_FACEBOOK_SECRET,
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET,
+    STRIPE_PUBLISHABLE_KEY,
+    STRIPE_SECRET_KEY,
+    STRIPE_API_VERSION,
+    STRIPE_WEBHOOK_SECRET)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,10 +33,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-yhcg^=w_hv=v!4+xa5hnhm3wm!d4fa%8^b(wq30^r$su0g1q+t'
+SECRET_KEY = SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['mysite.com', 'localhost', '127.0.0.1']
 
@@ -88,9 +102,9 @@ WSGI_APPLICATION = 'iShop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ishop',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
     }
 }
 
@@ -152,15 +166,11 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
 ]
 
-# SOCIAL_AUTH_JSONFIELD_ENABLED = True
-# SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_FACEBOOK_KEY = SOCIAL_AUTH_FACEBOOK_KEY
+SOCIAL_AUTH_FACEBOOK_SECRET = SOCIAL_AUTH_FACEBOOK_SECRET
 
-SOCIAL_AUTH_FACEBOOK_KEY = '399877359080905'
-SOCIAL_AUTH_FACEBOOK_SECRET = '080d7cbcb5e888bc59228b154edc36c1'
-# SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '148402065120-nf9ip35rh1og7uki63llhkenvre439b0.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
@@ -176,7 +186,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
 )
 
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51OcqYoIWOvsq1eRbqWqwbDvB9e6G2frX3RSnmjpJvfiwYIAKSg4P41E6tZ3MrGmia164H5sN2vPoSTC1O3hVs4eE00rQZY0qvK'
-STRIPE_SECRET_KEY = 'sk_test_51OcqYoIWOvsq1eRbXdP9LbybSX1QZ7uxGHF8iNG6UJZCyYO9HYpUxFXr6rImGQgk9fwtSFKqce5lMof7OYGOt8Hu00f5VbCkhx'
-STRIPE_API_VERSION = '2023-10-16'
-STRIPE_WEBHOOK_SECRET = 'whsec_cb30f1dd0c8a900e158f94f86dfa0b557133b70c4a1056b99e3c491b47934a4d'
+STRIPE_PUBLISHABLE_KEY = STRIPE_PUBLISHABLE_KEY
+STRIPE_SECRET_KEY = STRIPE_SECRET_KEY
+STRIPE_API_VERSION = STRIPE_API_VERSION
+STRIPE_WEBHOOK_SECRET = STRIPE_WEBHOOK_SECRET

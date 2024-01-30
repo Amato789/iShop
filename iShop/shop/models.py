@@ -68,6 +68,16 @@ class Product(models.Model):
     def get_rating(self):
         return self.ratings.aggregate(models.Avg('star', default=0))['star__avg']
 
+    def get_price_with_discount(self):
+        try:
+            discount = self.discounts.get(active=True)
+        except:
+            discount = None
+        if discount is None:
+            return ''
+        return self.price * (100 - discount.discount) / 100
+        # return self.discounts.get(active=True)
+
 
 class ProductImages(models.Model):
     image = models.ImageField(upload_to='products/%Y/%m/%d')

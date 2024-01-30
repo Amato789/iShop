@@ -4,7 +4,7 @@ from shop.models import Product
 
 
 class Discount(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='discount')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='discounts')
     valid_from = models.DateTimeField()
     valid_to = models.DateTimeField()
     discount = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)],

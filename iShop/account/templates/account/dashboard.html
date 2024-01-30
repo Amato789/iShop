@@ -67,7 +67,7 @@
                 {% for wl_product in user_wishlist %}
                     <tr>
                         <td class="align-middle">{{ wl_product.id }}</td>
-                        <td class="align-middle">{{ wl_product.created }}</td>
+                        <td class="align-middle">{{ wl_product.created|date:"M d, Y" }}</td>
                         <td class="align-middle">
                             <img src="{% if wl_product.product.image %}{{ wl_product.product.image.url }}
                             {% else %}{% static 'img/no_image.png' %}{% endif %}" alt="" style="width: 50px;">
@@ -75,7 +75,11 @@
                         </td>
                         <td class="align-middle"></td>
                         <td class="align-middle">${{ wl_product.product.price }}</td>
-                        <td class="align-middle">Buy</td>
+                        <td class="align-middle">
+                            <a href="{% url 'shop:product_detail' wl_product.product.slug %}">
+                                Buy
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -97,18 +101,18 @@
                         <th></th>
                         <th>Status</th>
                         <th>Total Sum</th>
-                        <th>PDF</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody class="align-middle">
                 {% for order in user_orders %}
                     <tr>
                         <td class="align-middle">{{ order.id }}</td>
-                        <td class="align-middle">{{ order.created }}</td>
+                        <td class="align-middle">{{ order.created|date:"M d, Y" }}</td>
                         <td class="align-middle"></td>
                         <td class="align-middle">{{ order.paid }}</td>
                         <td class="align-middle">{{ order.get_total_cost }}</td>
-                        <td class="align-middle">Remove</td>
+                        <td class="align-middle"></td>
                     </tr>
                 {% endfor %}
                 </tbody>
