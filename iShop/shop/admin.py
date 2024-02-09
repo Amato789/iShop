@@ -1,6 +1,17 @@
 from django.contrib import admin
 from .models import Category, Product, Brand, ProductImages, Review, Rating
 from django.utils.safestring import mark_safe
+from ckeditor.widgets import CKEditorWidget
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from django import forms
+
+
+class ProductAdminForm(forms.ModelForm):
+    description = forms.CharField(widget=CKEditorUploadingWidget())
+
+    class Meta:
+        model = Product
+        fields = '__all__'
 
 
 class ProductImagesInline(admin.TabularInline):
@@ -25,6 +36,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug', 'category', 'price', 'available', 'created', 'updated']
     inlines = [ProductImagesInline]
     list_filter = ['available', 'created', 'updated']
+    form = ProductAdminForm
     list_editable = ['price', 'available']
     prepopulated_fields = {'slug': ('name',)}
 
