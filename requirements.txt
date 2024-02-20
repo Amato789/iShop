@@ -1,5 +1,6 @@
 amqp==5.2.0
 asgiref==3.7.2
+astroid==2.15.8
 billiard==4.2.0
 Brotli==1.1.0
 celery==5.3.6
@@ -14,13 +15,17 @@ cryptography==41.0.7
 cssselect2==0.7.0
 defusedxml==0.8.0rc2
 Django==5.0
+django-ckeditor==6.7.1
 django-extensions==3.2.3
+django-js-asset==2.2.0
 django-phonenumber-field==7.3.0
-flake8==7.0.0
+flake8==6.1.0
+flake8-django==1.4
 fonttools==4.47.2
 html5lib==1.1
 idna==3.6
 kombu==5.3.5
+lazy-object-proxy==1.10.0
 MarkupSafe==2.1.4
 mccabe==0.7.0
 oauthlib==3.2.2
@@ -31,7 +36,7 @@ psycopg2-binary==2.9.9
 pycodestyle==2.11.1
 pycparser==2.21
 pydyf==0.8.0
-pyflakes==3.2.0
+pyflakes==3.1.0
 PyJWT==2.8.0
 pyOpenSSL==23.3.0
 pyphen==0.14.0
@@ -54,4 +59,5 @@ wcwidth==0.2.13
 weasyprint==60.2
 webencodings==0.5.1
 Werkzeug==3.0.1
+wrapt==1.16.0
 zopfli==0.2.3
