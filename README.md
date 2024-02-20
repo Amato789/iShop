@@ -12,5 +12,33 @@ asynchronous tasks, social authentication, a comment system and wish list, a per
 exporting orders to CSV and generating invoices to PDF, and a recommendation system.
 
 
-## Examples of How To Use
+## Running with Docker ![Docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
+1. Clone the repository:
+
+   `git clone https://github.com/Amato789/iShop`
+
+2. Create an `.env` file. and add your own data following the structure and path of the `.env_example` file.
+3. Use `make app` to run application and database infrastructure.
+4. Use `make migrate` to apply migration abd create all needed db.
+5. Use `make app-logs` to follow the logs in app container.
+
+Available commands:
+
+`make app` - Up application and database infrastructure
+
+`make app-logs` - Follow the logs in app container
+
+`make app-down` - Down application and all infrastructure
+
+`make container-shell` - Go to container shell
+
+`make storages-shell` - Go to storages shell
+
+`make migrate` - Apply all made migrations
+
+`make makemigrations` - Make migrations to models
+
+`make createsuperuser` - Create admin user
+
+`make collectstatic` - Collect static

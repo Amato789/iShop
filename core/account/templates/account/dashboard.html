@@ -1,0 +1,125 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="#">Home</a>
+                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                    <span class="breadcrumb-item active">Your Dashboard</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Login Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-lg-8">
+                <h5 class="section-title position-relative text-uppercase mb-3">
+                    <span class="bg-secondary pr-3">Personal information</span>
+                </h5>
+                <div class="bg-light p-30 mb-5">
+                    <div class="media mb-4">
+                        <img src="{% if request.user.profile.photo %}{{ request.user.profile.photo.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 90px;">
+                        <div class="media-body">
+                            <h5><small>Username:</small> {{ request.user }}</h5>
+                            <h5><small>First name:</small> {{ request.user.first_name }}</h5>
+                            <h5><small>Last name:</small> {{ request.user.last_name }}</h5>
+                            <h5><small>Date of birth:</small> {{ request.user.profile.date_of_birth }}</h5>
+                        </div>
+                    </div>
+                    <p><a href="{% url 'edit' %}">Edit your profile</a><br>
+                    <a href="{% url 'password_change' %}">Change your password</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="row px-xl-5">
+            <div class="col-lg-8">
+                <h5 class="section-title position-relative text-uppercase mb-3">
+                    <span class="bg-secondary pr-3">My wishlist</span>
+                </h5>
+            </div>
+            <div class="col-lg-8 table-responsive mb-5">
+                <table class="table table-light table-borderless table-hover text-center mb-0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Product</th>
+                        <th></th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+                {% for wl_product in user_wishlist %}
+                    <tr>
+                        <td class="align-middle">{{ wl_product.id }}</td>
+                        <td class="align-middle">{{ wl_product.created|date:"M d, Y" }}</td>
+                        <td class="align-middle">
+                            <img src="{% if wl_product.product.image %}{{ wl_product.product.image.url }}
+                            {% else %}{% static 'img/no_image.png' %}{% endif %}" alt="" style="width: 50px;">
+                            {{ wl_product.product.name }}
+                        </td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle">${{ wl_product.product.price }}</td>
+                        <td class="align-middle">
+                            <a href="{% url 'shop:product_detail' wl_product.product.slug %}">
+                                Buy
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row px-xl-5">
+            <div class="col-lg-8">
+                <h5 class="section-title position-relative text-uppercase mb-3">
+                    <span class="bg-secondary pr-3">My orders</span>
+                </h5>
+            </div>
+            <div class="col-lg-8 table-responsive mb-5">
+                <table class="table table-light table-borderless table-hover text-center mb-0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th></th>
+                        <th>Status</th>
+                        <th>Total Sum</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+                {% for order in user_orders %}
+                    <tr>
+                        <td class="align-middle">{{ order.id }}</td>
+                        <td class="align-middle">{{ order.created|date:"M d, Y" }}</td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle">{{ order.paid }}</td>
+                        <td class="align-middle">{{ order.get_total_cost }}</td>
+                        <td class="align-middle"></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Login End -->
+
+{% endblock %}

@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: storage_db
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - ishop_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    command: -p ${POSTGRES_PORT}
+
+  main-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: main-app
+    ports:
+      - "8000:8000"
+    command: "sh /entrypoint.sh"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app/
+
+volumes:
+  ishop_data:
