@@ -12,6 +12,20 @@ services:
       - .env
     command: -p ${POSTGRES_PORT}
 
+  stripe-cli:
+    image: stripe/stripe-cli
+    container_name: stripe-cli
+    volumes:
+      - stripe-config:/root/.config/stripe/
+      - stripe-gpg:/root/.gnupg/
+      - stripe-pass:/root/.password-store/
+    environment:
+      - STRIPE_API_KEY = ${STRIPE_SECRET_KEY}
+      - STRIPE_DEVICE_NAME = 'iShop_docker'
+    command: "listen --forward-to 0.0.0.0:8000/payment/webhook/"
+    env_file:
+      - .env
+
   main-app:
     build:
       context: .
@@ -27,5 +41,29 @@ services:
     volumes:
       - .:/app/
 
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: celery
+    depends_on:
+      - main-app
+      - rabbitmq
+    command: celery -A core.iShop worker -l info
+    environment:
+      - CELERY_BROKER_URL=amqp://guest:@rabbitmq:5672//
+    volumes:
+      - .:/app
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+
 volumes:
   ishop_data:
+  stripe-config:
+  stripe-gpg:
+  stripe-pass:

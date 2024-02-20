@@ -20,10 +20,18 @@ exporting orders to CSV and generating invoices to PDF, and a recommendation sys
 
 2. Create an `.env` file. and add your own data following the structure and path of the `.env_example` file.
 3. Use `make app` to run application and database infrastructure.
-4. Use `make migrate` to apply migration abd create all needed db.
-5. Use `make app-logs` to follow the logs in app container.
+4. Use `make migrate` to apply migration, create all needed db and add some default data (Category, Brand, Product).
+5. Use `make createsuperuser` to create admin user.
+6. Use `make app-logs` to follow the logs in app container.
+7. In payment Stripe service form you can use:
+   
+   - Card number: 4242 4242 4242 4242
+   - Use a valid future date, such as 12/34
+   - Use any three-digit CVC (four digits for American Express cards).
+   - Use any value you like for other form fields.
 
-Available commands:
+
+## Available commands:
 
 `make app` - Up application and database infrastructure
 
